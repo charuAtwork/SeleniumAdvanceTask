@@ -1,0 +1,179 @@
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using SkillSharePortal_ServiceList.Config;
+using SkillSharePortal_ServiceList.Global;
+using SkillSharePortal_ServiceList.Pages;
+using AventStack.ExtentReports.Reporter;
+using AventStack.ExtentReports;
+using System;
+using NUnit.Framework.Interfaces;
+
+namespace SkillSharePortal_ServiceList
+{
+    [TestFixture]
+    public class AutomatedTests : GlobalDefinitions
+    {
+        //for ExtentTest
+        public static ExtentTest test;
+
+        //for Extent Reports
+        public static ExtentReports extent;
+
+        [SetUp]
+        public void Setup()
+        {
+            switch (Browser)
+            {
+                case 1:
+                    GlobalDefinitions.driver = new ChromeDriver();
+                    break;
+
+                case 2:
+                    GlobalDefinitions.driver = new FirefoxDriver();
+                    break;
+            }
+            GlobalDefinitions.driver.Manage().Window.Maximize();
+        }
+
+
+        [OneTimeSetUp]
+        public void StartReport()
+        {
+          //To obtain the current solution path/project path
+          string path = System.Reflection.Assembly.GetCallingAssembly().CodeBase;
+          string actualPath = path.Substring(0, path.LastIndexOf("bin"));
+          string projectPath = new Uri(actualPath).LocalPath;
+          string reportPath = projectPath + "Reports\\TestRunReport.html";
+
+          var htmlReporter = new ExtentHtmlReporter(reportPath);
+          var extent = new ExtentReports();
+          //Add QA system info to html report
+          extent.AttachReporter(htmlReporter);
+          extent.AddSystemInfo("Host Name", "LocalHost");
+          extent.AddSystemInfo("Environment", "QAEnvironment");
+          extent.AddSystemInfo("Username", "Charu Lamba");
+        }
+
+        [Test, Description("SignIn / LogIn"), Order(1)]
+        public static void SignIn()
+        {
+            ExtentTest test = extent.CreateTest("SignIn").Info("SignIn/LogIn Verification");
+            
+            if (SkillShareResource.IsLogin == "true")
+            {
+                LoginPage loginObj = new LoginPage(driver);
+                loginObj.LogInPortal();
+                test.Log(Status.Info, "Login Successful");
+                test.Log(Status.Pass, "Test Case, LogIn Passed");
+            }
+            else
+            {
+                RegisterNewUser ObjNewUser = new RegisterNewUser(driver);
+                ObjNewUser.NewUser();
+                test.Log(Status.Info, "New User Created Successfully");
+                test.Log(Status.Pass, "Test Case, SignIn Passed");
+            }
+        }
+
+        [Test, Order(2)]
+        [TestCase(2)]
+        [TestCase(10)]
+        [TestCase(17)]
+        [Category("Adding a Skill")]
+        public void ShareSkill(int rownumber)
+        {
+            test = extent.CreateTest("ShareSkill").Info("Adding a Skill");
+
+             LoginPage LoginObj = new LoginPage(driver);
+             LoginObj.LogInPortal();
+            //LoginObj.ValidateLogIn();
+            
+            NavigateToPage PageObj = new NavigateToPage(driver);
+            PageObj.ClickShareSkill();
+            
+            AddService SkillObj = new AddService(driver, rownumber);
+            SkillObj.AddServiceData();
+            test.Log(Status.Info, "Service has been added Successfully");
+            
+            ManageListingPage ManageServiceObj = new ManageListingPage(driver, rownumber);
+            ManageServiceObj.ValidateServiceListing(rownumber);
+            test.Log(Status.Info, "Validation for Service Addition done successfully");
+            test.Log(Status.Pass, "Test Case,'ShareSkill' Passed");
+        }
+
+        [Test, Order(4)]
+        [Category("Delete the Service from Manage Listing page")]
+        [TestCase("Selenium")]
+        [TestCase("Web Designing")]
+        [TestCase("SQL Queries")]
+        public void DeleteListing(string TitleServiceDelete)
+        {
+           test = extent.CreateTest("DeleteListing").Info("Delete the Service from Manage Listing page");
+           LoginPage LoginObj = new LoginPage(driver);
+           LoginObj.LogInPortal();
+           NavigateToPage PageObj = new NavigateToPage(driver);
+           PageObj.ClickManageListing();
+           ManageListingPage DeleteObj = new ManageListingPage(driver, TitleServiceDelete);
+           DeleteObj.ServiceDelete();
+           test.Log(Status.Info, "Service Deleted successfully");
+           test.Log(Status.Info, "Validation done,after Delete");
+           test.Log(Status.Pass, "Test Case,'Service Deletion' Passed");
+        }
+
+        [Test, Order(3)]
+        [Category("Edit Service Details")]
+        [TestCase("SQL Queries")]
+
+        public void EditListing(string TitleServiceEdit)
+        {
+           test = extent.CreateTest("EditServiceDetails").Info("Edit the Service");
+           LoginPage LoginObj = new LoginPage(driver);
+           LoginObj.LogInPortal();
+           NavigateToPage PageObj = new NavigateToPage(driver);
+           PageObj.ClickManageListing();
+           ManageListingPage EditObj = new ManageListingPage(driver, TitleServiceEdit);
+           EditObj.ServiceEdit();
+           test.Log(Status.Info, "Service Edited successfully");
+           EditObj.ValidateServiceEdit();
+           test.Log(Status.Info, "Validation done,after Edit");
+           test.Log(Status.Pass, "Test Case,'Edit Service Details' Passed");
+        }
+
+        [TearDown]
+        public void AfterClass()
+        {
+           //StackTrace details for failed Testcases
+           var status = TestContext.CurrentContext.Result.Outcome.Status;
+           var stackTrace = "<pre>" + TestContext.CurrentContext.Result.StackTrace + "</pre>";
+           var errorMessage = TestContext.CurrentContext.Result.Message;
+
+            if (status == TestStatus.Failed)
+            {
+                test.Log(Status.Fail, stackTrace + errorMessage);
+                test.Log(Status.Fail, "ScreenShot of the Error: " + SaveScreenShotClass.SaveScreenshot(driver, $"{test} Failed"));
+            }
+                //End test report
+                //extent.EndTest(test);
+                driver.Quit();
+        }
+
+        [OneTimeTearDown]
+
+        public void EndReport()
+        {
+         //End Report
+          extent.Flush();
+          //extent.Close();
+        }
+
+
+            //[TearDown]
+            /* public void WindUp()
+             {
+                 driver.Quit();
+             }*/
+
+        }
+    }

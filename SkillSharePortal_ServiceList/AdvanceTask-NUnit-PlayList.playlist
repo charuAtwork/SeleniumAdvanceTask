@@ -1,0 +1,72 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="SkillSharePortal_ServiceList" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="SkillSharePortal_ServiceList.Tests" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="NotificationTestSuite" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.ChatMessageSend" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="ChatMessageSend" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.DeleteSelection" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="DeleteSelection" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.LoadMore" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="LoadMore" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.MarkAllAsRead" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="MarkAllAsRead" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.NotificationMsg" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="NotificationMsg" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.SelectAllNotifications" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="SelectAllNotifications" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.ShowLess" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="ShowLess" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="SkillSharePortal_ServiceList.Tests.NotificationTestSuite.UnSelectAllNotifications" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="UnSelectAllNotifications" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>
